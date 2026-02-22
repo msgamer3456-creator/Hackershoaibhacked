@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Critical Security Alert</title>
+<style>
+body{
+  margin:0;
+  background:black;
+  color:#00ff00;
+  font-family:monospace;
+  overflow:hidden;
+}
+
+canvas{
+  position:fixed;
+  top:0;
+  left:0;
+  z-index:-2;
+}
+
+#overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  border:4px solid red;
+  box-sizing:border-box;
+  display:none;
+  z-index:2;
+}
+
+#terminal{
+  padding:15px;
+  font-size:14px;
+  max-height:70vh;
+  overflow:hidden;
+}
+
+#final{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  font-size:40px;
+  color:red;
+  display:none;
+  text-align:center;
+  animation:blink 0.6s infinite;
+}
+
+@keyframes blink{
+  50%{opacity:0;}
+}
+
+.glitch{
+  animation:shake 0.1s infinite;
+}
+
+@keyframes shake{
+  0%{transform:translate(2px,2px);}
+  50%{transform:translate(-2px,-2px);}
+  100%{transform:translate(2px,-2px);}
+}
+</style>
+</head>
+<body onclick="goFullScreen()">
+
+<canvas id="matrix"></canvas>
+<div id="overlay"></div>
+<div id="terminal"></div>
+
+<div id="final">
+⚠ DEVICE LOCKED ⚠<br><br>
+Shoaib ne hack kar liya tumhara device 😈<br><br>
+System Shutdown in <span id="count">5</span>
+</div>
+
+<script>
+
+// FULLSCREEN
+function goFullScreen(){
+if(document.documentElement.requestFullscreen){
+document.documentElement.requestFullscreen();
+}
+}
+
+// MATRIX
+var canvas=document.getElementById("matrix");
+var ctx=canvas.getContext("2d");
+canvas.height=window.innerHeight;
+canvas.width=window.innerWidth;
+
+var letters="01ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+letters=letters.split("");
+var fontSize=14;
+var columns=canvas.width/fontSize;
+var drops=[];
+for(var x=0;x<columns;x++) drops[x]=1;
+
+function draw(){
+ctx.fillStyle="rgba(0,0,0,0.05)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="#0f0";
+ctx.font=fontSize+"px monospace";
+for(var i=0;i<drops.length;i++){
+var text=letters[Math.floor(Math.random()*letters.length)];
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+drops[i]=0;
+drops[i]++;
+}
+}
+setInterval(draw,33);
+
+// TERMINAL
+var terminal=document.getElementById("terminal");
+
+function randomIP(){
+return Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255)+"."+Math.floor(Math.random()*255);
+}
+
+var messages=[
+"Connecting to remote server...",
+"Target IP: "+randomIP(),
+"Location: India Secure Node",
+"Accessing system files...",
+"Decrypting passwords...",
+"Camera feed intercepted...",
+"Admin privileges granted..."
+];
+
+let i=0;
+
+function typeMessage(){
+if(i<messages.length){
+let p=document.createElement("p");
+p.textContent=messages[i];
+terminal.appendChild(p);
+i++;
+setTimeout(typeMessage,800);
+}else{
+finishHack();
+}
+}
+
+setTimeout(typeMessage,1000);
+
+// FINISH
+function finishHack(){
+document.body.classList.add("glitch");
+document.getElementById("overlay").style.display="block";
+setTimeout(()=>{
+document.getElementById("final").style.display="block";
+startCountdown();
+},1500);
+}
+
+function startCountdown(){
+let c=5;
+let countEl=document.getElementById("count");
+let interval=setInterval(()=>{
+c--;
+countEl.textContent=c;
+if(c<=0){
+clearInterval(interval);
+document.body.innerHTML="<h1 style='color:red;text-align:center;margin-top:20%;'>SYSTEM SHUTDOWN...</h1>";
+}
+},1000);
+}
+
+</script>
+</body>
+</html>
